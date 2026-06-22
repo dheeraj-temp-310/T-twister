@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alphabet Speed Practice</title>
+    <style>
+        /* CSS Variables based on the TRAE theme */
+        :root {
+            --bg-color: #070707;
+            --surface-color: #111111;
+            --accent-color: #00e599; 
+            --accent-hover: #00c482;
+            --text-primary: #ffffff;
+            --text-secondary: #a1a1aa;
+            --danger-color: #ff4d4f;
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: var(--font-family);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-image: radial-gradient(circle, #222 1px, transparent 1px);
+            background-size: 24px 24px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Screen Management */
+        .screen {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: -0.05em;
+            line-height: 1.1;
+        }
+        h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+        h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            border-bottom: 1px solid #333;
+            padding-bottom: 0.5rem;
+        }
+        p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Buttons */
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-width: 400px;
+        }
+
+        button {
+            background: var(--surface-color);
+            color: var(--text-primary);
+            border: 1px solid #333;
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        button:hover {
+            border-color: var(--accent-color);
+            background: rgba(0, 229, 153, 0.05);
+        }
+
+        button.primary {
+            background: var(--accent-color);
+            color: #000;
+            border: none;
+            font-weight: 600;
+        }
+
+        button.primary:hover {
+            background: var(--accent-hover);
+        }
+        
+        button.danger {
+            background: transparent;
+            color: var(--danger-color);
+            border: 1px solid var(--danger-color);
+            margin-top: 2rem;
+        }
+        button.danger:hover {
+            background: rgba(255, 77, 79, 0.1);
+        }
+
+        /* Test Screen Specifics */
+        .header-stats {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            font-family: monospace;
+            font-size: 1.2rem;
+            border-bottom: 1px solid #333;
+            padding-bottom: 1rem;
+        }
+
+        .question-area {
+            text-align: center;
+            margin: 4rem 0;
+        }
+
+        .question-label {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .question-value {
+            font-size: 6rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 2rem;
+            line-height: 1;
+        }
+
+        .input-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        input {
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid #555;
+            color: var(--text-primary);
+            font-size: 3rem;
+            text-align: center;
+            width: 150px;
+            padding: 0.5rem;
+            outline: none;
+            transition: border-color 0.2s;
+            text-transform: uppercase;
+        }
+
+        input:focus {
+            border-bottom-color: var(--accent-color);
+        }
+        
+        input::placeholder {
+            color: #333;
+            font-size: 1.5rem;
+            vertical-align: middle;
+        }
+
+        .feedback {
+            min-height: 24px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-top: 1rem;
+        }
+
+        .feedback.success { color: var(--accent-color); }
+        .feedback.error { color: var(--danger-color); }
+
+        /* Results Screen */
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--surface-color);
+            border: 1px solid #333;
+            padding: 1.5rem;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+
+        /* Mistakes Review Section */
+        .mistakes-container {
+            margin-top: 3rem;
+            margin-bottom: 3rem;
+            background: var(--surface-color);
+            padding: 2rem;
+            border-radius: 4px;
+            border: 1px solid #333;
+        }
+
+        .mistake-item {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            background: rgba(255, 77, 79, 0.05);
+            border-left: 4px solid var(--danger-color);
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            border-radius: 4px;
+            align-items: center;
+        }
+
+        .mistake-item div {
+            font-size: 1.1rem;
+        }
+
+        .mistake-item span {
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 600px) {
+            h1 { font-size: 2.5rem; }
+            .question-value { font-size: 4rem; }
+            input { font-size: 2rem; width: 120px; }
+            .header-stats { font-size: 1rem; flex-direction: column; gap: 0.5rem; text-align: center; }
+            .mistake-item { grid-template-columns: 1fr; gap: 0.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="app">
+        
+        <div id="home-screen" class="screen active">
+            <h1>Ship Faster with<br><span style="color: var(--accent-color);">ALPHABET</span></h1>
+            <p>Your Professional Cognitive Work Assistant.</p>
+            
+            <div class="btn-group">
+                <button onclick="startTest('letter-to-number')">
+                    <span style="color: var(--accent-color);">■</span> Letter → Number
+                </button>
+                <button onclick="startTest('number-to-letter')">
+                    <span style="color: var(--accent-color);">■</span> Number → Letter
+                </button>
+                <button onclick="startTest('opposite-pair')">
+                    <span style="color: var(--accent-color);">■</span> Opposite Pair
+                </button>
+            </div>
+        </div>
+
+        <div id="test-screen" class="screen">
+            <div class="header-stats">
+                <div id="ui-timer">Timer: 00:00</div>
+                <div id="ui-q-num">Question: 1/26</div>
+                <div id="ui-score">Score: 0/0</div>
+            </div>
+
+            <div class="question-area">
+                <div class="question-label" id="ui-test-title">Test Type</div>
+                <div class="question-value" id="ui-question">A</div>
+            </div>
+
+            <div class="input-area">
+                <input type="text" id="answer-input" autocomplete="off" placeholder="Auto-submits" autofocus>
+                <div id="ui-feedback" class="feedback"></div>
+            </div>
+
+            <div style="text-align: center;">
+                <button class="danger" onclick="endTest()">End Test Early</button>
+            </div>
+        </div>
+
+        <div id="results-screen" class="screen">
+            <h2>Final Report</h2>
+            
+            <div class="results-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Test Type</div>
+                    <div class="stat-value" id="res-type" style="color: var(--text-primary); font-size: 1.5rem;">-</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Accuracy</div>
+                    <div class="stat-value" id="res-accuracy">0%</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Correct / Total</div>
+                    <div class="stat-value" id="res-score">0 / 26</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Time Taken</div>
+                    <div class="stat-value" id="res-time">00:00</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Avg. Response</div>
+                    <div class="stat-value" id="res-avg">0s</div>
+                </div>
+            </div>
+
+            <div id="res-mistakes" class="mistakes-container">
+                </div>
+
+            <div class="btn-group" style="margin: 0 auto;">
+                <button class="primary" onclick="showScreen('home-screen')">Back to Home</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- Core Data & Variables ---
+        const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        
+        let state = {
+            mode: null,
+            score: 0,
+            wrong: 0,
+            questionPool: [],
+            currentIndex: 0,
+            startTime: 0,
+            timerInterval: null,
+            currentCorrectAnswer: "",
+            currentQuestionText: "",
+            elapsedSeconds: 0,
+            isTransitioning: false,
+            mistakes: [] // Stores objects: { question, expected, given }
+        };
+
+        // --- DOM Elements ---
+        const screens = {
+            home: document.getElementById('home-screen'),
+            test: document.getElementById('test-screen'),
+            results: document.getElementById('results-screen')
+        };
+        
+        const ui = {
+            timer: document.getElementById('ui-timer'),
+            qNum: document.getElementById('ui-q-num'),
+            score: document.getElementById('ui-score'),
+            title: document.getElementById('ui-test-title'),
+            question: document.getElementById('ui-question'),
+            input: document.getElementById('answer-input'),
+            feedback: document.getElementById('ui-feedback'),
+            mistakes: document.getElementById('res-mistakes')
+        };
+
+        // --- Utility ---
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // --- Navigation ---
+        function showScreen(screenId) {
+            Object.values(screens).forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            
+            // Scroll to top when showing results
+            if(screenId === 'results-screen') {
+                window.scrollTo(0,0);
+            }
+        }
+
+        // --- Test Logic ---
+        function startTest(mode) {
+            const indices = Array.from({length: 26}, (_, i) => i);
+            
+            state = {
+                mode: mode,
+                score: 0,
+                wrong: 0,
+                questionPool: shuffleArray(indices),
+                currentIndex: 0,
+                startTime: Date.now(),
+                elapsedSeconds: 0,
+                currentCorrectAnswer: "",
+                currentQuestionText: "",
+                isTransitioning: false,
+                mistakes: []
+            };
+
+            const titles = {
+                'letter-to-number': 'Letter → Number',
+                'number-to-letter': 'Number → Letter',
+                'opposite-pair': 'Opposite Pair'
+            };
+            ui.title.innerText = titles[mode];
+            ui.feedback.innerText = "";
+            ui.feedback.className = "feedback";
+            ui.input.value = "";
+            
+            updateStatsUI();
+            startTimer();
+            showScreen('test-screen');
+            generateQuestion();
+            
+            setTimeout(() => ui.input.focus(), 100);
+        }
+
+        function startTimer() {
+            clearInterval(state.timerInterval);
+            state.timerInterval = setInterval(() => {
+                state.elapsedSeconds = Math.floor((Date.now() - state.startTime) / 1000);
+                ui.timer.innerText = `Timer: ${formatTime(state.elapsedSeconds)}`;
+            }, 1000);
+        }
+
+        function generateQuestion() {
+            if (state.currentIndex >= 26) {
+                endTest();
+                return;
+            }
+
+            ui.input.value = "";
+            state.isTransitioning = false;
+            
+            const letterIndex = state.questionPool[state.currentIndex];
+            const currentLetter = alphabet[letterIndex];
+            
+            if (state.mode === 'letter-to-number') {
+                state.currentQuestionText = currentLetter;
+                state.currentCorrectAnswer = (letterIndex + 1).toString();
+            } 
+            else if (state.mode === 'number-to-letter') {
+                state.currentQuestionText = (letterIndex + 1).toString();
+                state.currentCorrectAnswer = currentLetter;
+            } 
+            else if (state.mode === 'opposite-pair') {
+                state.currentQuestionText = currentLetter;
+                state.currentCorrectAnswer = alphabet[25 - letterIndex];
+            }
+
+            ui.question.innerText = state.currentQuestionText;
+            updateStatsUI();
+        }
+
+        function processAnswer(userAnswer) {
+            if (state.isTransitioning) return;
+            state.isTransitioning = true; 
+
+            if (userAnswer === state.currentCorrectAnswer) {
+                state.score++;
+                showFeedback("Correct!", "success");
+            } else {
+                state.wrong++;
+                // Record the mistake
+                state.mistakes.push({
+                    question: state.currentQuestionText,
+                    expected: state.currentCorrectAnswer,
+                    given: userAnswer
+                });
+                showFeedback(`Wrong! Answer: ${state.currentCorrectAnswer}`, "error");
+            }
+
+            state.currentIndex++;
+            
+            setTimeout(() => {
+                generateQuestion();
+            }, 300);
+        }
+
+        function showFeedback(msg, type) {
+            ui.feedback.innerText = msg;
+            ui.feedback.className = `feedback ${type}`;
+        }
+
+        function updateStatsUI() {
+            const displayQNum = Math.min(state.currentIndex + 1, 26);
+            ui.qNum.innerText = `Question: ${displayQNum}/26`;
+            ui.score.innerText = `Score: ${state.score}/${state.currentIndex}`;
+        }
+
+        function endTest() {
+            clearInterval(state.timerInterval);
+            
+            const totalAnswered = state.currentIndex;
+            const accuracy = totalAnswered > 0 ? Math.round((state.score / totalAnswered) * 100) : 0;
+            const avgTime = totalAnswered > 0 ? (state.elapsedSeconds / totalAnswered).toFixed(1) : 0;
+            
+            const titles = {
+                'letter-to-number': 'Letter → Number',
+                'number-to-letter': 'Number → Letter',
+                'opposite-pair': 'Opposite Pair'
+            };
+
+            // Top Stats
+            document.getElementById('res-type').innerText = titles[state.mode];
+            document.getElementById('res-accuracy').innerText = `${accuracy}%`;
+            document.getElementById('res-score').innerText = `${state.score} / ${totalAnswered}`;
+            document.getElementById('res-time').innerText = formatTime(state.elapsedSeconds);
+            document.getElementById('res-avg').innerText = `${avgTime}s / q`;
+
+            // Mistakes Render
+            if (state.mistakes.length === 0) {
+                ui.mistakes.innerHTML = `
+                    <h3>Mistakes Review</h3>
+                    <p style="color: var(--accent-color); margin-bottom: 0;">Flawless victory! You made zero mistakes.</p>
+                `;
+            } else {
+                let mistakesHTML = `<h3>Mistakes Review (${state.mistakes.length})</h3><div class="mistakes-list">`;
+                
+                state.mistakes.forEach(m => {
+                    mistakesHTML += `
+                        <div class="mistake-item">
+                            <div>Question: <span style="color: var(--text-primary);">${m.question}</span></div>
+                            <div>Your Answer: <span style="color: var(--danger-color);">${m.given}</span></div>
+                            <div>Correct Answer: <span style="color: var(--accent-color);">${m.expected}</span></div>
+                        </div>
+                    `;
+                });
+                
+                mistakesHTML += `</div>`;
+                ui.mistakes.innerHTML = mistakesHTML;
+            }
+
+            showScreen('results-screen');
+        }
+
+        // --- Helpers ---
+        function formatTime(totalSeconds) {
+            const m = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
+            const s = (totalSeconds % 60).toString().padStart(2, '0');
+            return `${m}:${s}`;
+        }
+
+        // --- Event Listeners ---
+        
+        ui.input.addEventListener('input', function(e) {
+            const userAnswer = ui.input.value.trim().toUpperCase();
+            if (!userAnswer) return;
+
+            const targetLength = state.currentCorrectAnswer.length;
+            
+            if (userAnswer.length === targetLength) {
+                processAnswer(userAnswer);
+            }
+        });
+
+        screens.test.addEventListener('click', () => {
+            if (screens.test.classList.contains('active')) {
+                ui.input.focus();
+            }
+        });
+
+    </script>
+</body>
+</html>
