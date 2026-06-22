@@ -3,601 +3,425 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alphabet Speed Practice</title>
+    <title>50-Rep Speech Drill</title>
     <style>
-        /* CSS Variables based on the TRAE theme */
+        /* CSS: Dark Theme inspired by TRAE */
         :root {
-            --bg-color: #070707;
-            --surface-color: #111111;
-            --accent-color: #00e599; 
-            --accent-hover: #00c482;
-            --text-primary: #ffffff;
-            --text-secondary: #a1a1aa;
-            --danger-color: #ff4d4f;
-            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --bg-color: #050505;
+            --bg-card: #111111;
+            --text-main: #f3f4f6;
+            --text-heading: #ffffff;
+            --text-muted: #9ca3af;
+            --accent: #1ee57a;
+            --accent-hover: #16c768;
+            --border-color: #27272a;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
         body {
             background-color: var(--bg-color);
-            color: var(--text-primary);
-            font-family: var(--font-family);
-            min-height: 100vh;
+            color: var(--text-main);
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            background-image: radial-gradient(circle, #222 1px, transparent 1px);
+            min-height: 100vh;
+            /* Dotted background pattern */
+            background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
             background-size: 24px 24px;
-            overflow-x: hidden;
         }
 
-        .container {
+        /* --- Header / Navigation --- */
+        header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 40px;
+            border-bottom: 1px solid var(--border-color);
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: rgba(5, 5, 5, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-heading);
+            letter-spacing: -0.02em;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .difficulty-selector {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .difficulty-selector span {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-right: 0.5rem;
+        }
+
+        .nav-btn {
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid transparent;
+            padding: 6px 16px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border-radius: 99px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn:hover {
+            color: var(--text-main);
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-btn.active {
+            color: var(--accent);
+            border-color: var(--accent);
+            background-color: rgba(30, 229, 122, 0.05);
+        }
+
+        /* --- Main Layout --- */
+        main {
             width: 100%;
             max-width: 800px;
-            padding: 2rem;
-            position: relative;
-            z-index: 1;
+            padding: 140px 20px 60px 20px; /* Top padding clears the fixed header */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        /* Screen Management */
-        .screen {
-            display: none;
-            animation: fadeIn 0.3s ease-in-out;
-        }
-        .screen.active {
-            display: block;
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+            width: 100%;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Typography */
         h1 {
             font-size: 4rem;
             font-weight: 700;
             margin-bottom: 1rem;
-            letter-spacing: -0.05em;
+            letter-spacing: -0.04em;
+            color: var(--text-heading);
             line-height: 1.1;
         }
-        h2 {
-            font-size: 2rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: var(--text-primary);
-        }
-        h3 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: var(--text-primary);
-            border-bottom: 1px solid #333;
-            padding-bottom: 0.5rem;
-        }
-        p {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-            margin-bottom: 2rem;
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            margin-bottom: 2.5rem;
         }
 
-        /* Buttons */
-        .btn-group {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            max-width: 400px;
-        }
-
-        button {
-            background: var(--surface-color);
-            color: var(--text-primary);
-            border: 1px solid #333;
-            padding: 1rem 1.5rem;
-            font-size: 1.1rem;
-            font-weight: 500;
+        /* Primary Button */
+        .btn-primary {
+            background-color: var(--accent);
+            color: #000000;
+            border: none;
             border-radius: 4px;
+            padding: 16px 36px;
+            font-size: 1.1rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
+            transition: all 0.2s ease;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 0.5rem;
         }
 
-        button:hover {
-            border-color: var(--accent-color);
-            background: rgba(0, 229, 153, 0.05);
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(30, 229, 122, 0.2);
         }
 
-        button.primary {
-            background: var(--accent-color);
-            color: #000;
-            border: none;
-            font-weight: 600;
+        /* --- Practice Area --- */
+        #practiceArea {
+            width: 100%;
+            display: none;
+            background-color: var(--bg-card);
+            padding: 3rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            animation: fadeIn 0.6s ease forwards;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
-        button.primary:hover {
-            background: var(--accent-hover);
-        }
-        
-        button.danger {
-            background: transparent;
-            color: var(--danger-color);
-            border: 1px solid var(--danger-color);
-            margin-top: 2rem;
-        }
-        button.danger:hover {
-            background: rgba(255, 77, 79, 0.1);
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Test Screen Specifics */
-        .header-stats {
-            display: flex;
-            justify-content: space-between;
-            color: var(--text-secondary);
-            margin-bottom: 3rem;
-            font-family: monospace;
-            font-size: 1.2rem;
-            border-bottom: 1px solid #333;
-            padding-bottom: 1rem;
+        .skills-box {
+            background-color: rgba(30, 229, 122, 0.05);
+            border-left: 3px solid var(--accent);
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 2.5rem;
+            border-radius: 0 6px 6px 0;
         }
 
-        .question-area {
-            text-align: center;
-            margin: 4rem 0;
-        }
-
-        .question-label {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
-            margin-bottom: 1rem;
+        .skills-box h3 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 0.05em;
         }
 
-        .question-value {
-            font-size: 6rem;
-            font-weight: 700;
-            color: var(--accent-color);
-            margin-bottom: 2rem;
-            line-height: 1;
+        .skills-box p {
+            color: var(--text-main);
+            font-size: 0.95rem;
+            line-height: 1.6;
         }
 
-        .input-area {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        input {
-            background: transparent;
-            border: none;
-            border-bottom: 2px solid #555;
-            color: var(--text-primary);
-            font-size: 3rem;
-            text-align: center;
-            width: 150px;
-            padding: 0.5rem;
-            outline: none;
-            transition: border-color 0.2s;
-            text-transform: uppercase;
-        }
-
-        input:focus {
-            border-bottom-color: var(--accent-color);
-        }
-        
-        input::placeholder {
-            color: #333;
+        .phase-title {
             font-size: 1.5rem;
-            vertical-align: middle;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-heading);
         }
 
-        .feedback {
-            min-height: 24px;
-            font-size: 1.1rem;
-            font-weight: 500;
-            margin-top: 1rem;
+        .twister-group {
+            margin-bottom: 2.5rem;
         }
 
-        .feedback.success { color: var(--accent-color); }
-        .feedback.error { color: var(--danger-color); }
-
-        /* Results Screen */
-        .results-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .stat-card {
-            background: var(--surface-color);
-            border: 1px solid #333;
-            padding: 1.5rem;
-            border-radius: 4px;
-            text-align: center;
-        }
-
-        .stat-label {
-            color: var(--text-secondary);
+        .group-focus {
             font-size: 0.9rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 0.5rem;
+            letter-spacing: 0.05em;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            font-weight: 700;
         }
 
-        .stat-value {
-            font-size: 2rem;
-            font-weight: 600;
-            color: var(--accent-color);
+        .twister-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 0.85rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            font-size: 1.2rem;
+            line-height: 1.5;
+            color: #d1d5db;
         }
 
-        /* Mistakes Review Section */
-        .mistakes-container {
-            margin-top: 3rem;
-            margin-bottom: 3rem;
-            background: var(--surface-color);
-            padding: 2rem;
-            border-radius: 4px;
-            border: 1px solid #333;
+        .twister-item:last-child {
+            border-bottom: none;
         }
 
-        .mistake-item {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            background: rgba(255, 77, 79, 0.05);
-            border-left: 4px solid var(--danger-color);
-            padding: 1rem;
-            margin-bottom: 0.75rem;
-            border-radius: 4px;
-            align-items: center;
-        }
-
-        .mistake-item div {
+        .item-number {
+            color: var(--text-muted);
+            font-weight: 500;
+            width: 3rem;
+            flex-shrink: 0;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
             font-size: 1.1rem;
         }
 
-        .mistake-item span {
-            font-weight: 700;
-            font-size: 1.2rem;
-        }
-
-        /* Mobile Adjustments */
-        @media (max-width: 600px) {
-            h1 { font-size: 2.5rem; }
-            .question-value { font-size: 4rem; }
-            input { font-size: 2rem; width: 120px; }
-            .header-stats { font-size: 1rem; flex-direction: column; gap: 0.5rem; text-align: center; }
-            .mistake-item { grid-template-columns: 1fr; gap: 0.5rem; }
+        /* --- Responsive Design --- */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px 20px;
+            }
+            .difficulty-selector span { display: none; }
+            main { padding-top: 120px; }
+            h1 { font-size: 2.8rem; }
+            #practiceArea { padding: 1.5rem; }
+            .twister-item { font-size: 1.05rem; }
         }
     </style>
 </head>
 <body>
 
-    <div class="container" id="app">
-        
-        <div id="home-screen" class="screen active">
-            <h1>Ship Faster with<br><span style="color: var(--accent-color);">ALPHABET</span></h1>
-            <p>Your Professional Cognitive Work Assistant.</p>
+    <!-- Header Navigation -->
+    <header>
+        <div class="logo">TRAE<span>.speech</span></div>
+        <div class="difficulty-selector" id="difficultyButtons">
+            <span>Level:</span>
+            <button class="nav-btn active" data-level="easy">Easy</button>
+            <button class="nav-btn" data-level="medium">Medium</button>
+            <button class="nav-btn" data-level="expert">Expert</button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="hero">
+            <h1>50-Rep Drill</h1>
+            <p class="subtitle">Press generate to build clarity, confidence, and precision.</p>
             
-            <div class="btn-group">
-                <button onclick="startTest('letter-to-number')">
-                    <span style="color: var(--accent-color);">■</span> Letter → Number
-                </button>
-                <button onclick="startTest('number-to-letter')">
-                    <span style="color: var(--accent-color);">■</span> Number → Letter
-                </button>
-                <button onclick="startTest('opposite-pair')">
-                    <span style="color: var(--accent-color);">■</span> Opposite Pair
-                </button>
-            </div>
+            <button id="practiceBtn" class="btn-primary">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                Generate Today's Test
+            </button>
         </div>
 
-        <div id="test-screen" class="screen">
-            <div class="header-stats">
-                <div id="ui-timer">Timer: 00:00</div>
-                <div id="ui-q-num">Question: 1/26</div>
-                <div id="ui-score">Score: 0/0</div>
-            </div>
-
-            <div class="question-area">
-                <div class="question-label" id="ui-test-title">Test Type</div>
-                <div class="question-value" id="ui-question">A</div>
-            </div>
-
-            <div class="input-area">
-                <input type="text" id="answer-input" autocomplete="off" placeholder="Auto-submits" autofocus>
-                <div id="ui-feedback" class="feedback"></div>
-            </div>
-
-            <div style="text-align: center;">
-                <button class="danger" onclick="endTest()">End Test Early</button>
-            </div>
+        <div id="practiceArea">
+            <!-- Test Content is injected here -->
         </div>
-
-        <div id="results-screen" class="screen">
-            <h2>Final Report</h2>
-            
-            <div class="results-grid">
-                <div class="stat-card">
-                    <div class="stat-label">Test Type</div>
-                    <div class="stat-value" id="res-type" style="color: var(--text-primary); font-size: 1.5rem;">-</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Accuracy</div>
-                    <div class="stat-value" id="res-accuracy">0%</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Correct / Total</div>
-                    <div class="stat-value" id="res-score">0 / 26</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Time Taken</div>
-                    <div class="stat-value" id="res-time">00:00</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Avg. Response</div>
-                    <div class="stat-value" id="res-avg">0s</div>
-                </div>
-            </div>
-
-            <div id="res-mistakes" class="mistakes-container">
-                </div>
-
-            <div class="btn-group" style="margin: 0 auto;">
-                <button class="primary" onclick="showScreen('home-screen')">Back to Home</button>
-            </div>
-        </div>
-
-    </div>
+    </main>
 
     <script>
-        // --- Core Data & Variables ---
-        const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        // Database structured by difficulty
+        const practiceData = {
+            easy: {
+                skills: "Clear vowels • P, B, F, H sounds • Basic rhythm and pacing",
+                twisters: [
+                    "I scream, you scream, we all scream for ice cream.",
+                    "A noisy noise annoys an oyster.",
+                    "Toy boat, toy boat, toy boat.",
+                    "Three free throws.",
+                    "Eleven elephants eagerly eat Easter eggs.",
+                    "He happily held his hat in his hand.",
+                    "Friendly frogs frolicked freely from France.",
+                    "A big black bear sat on a big black rug.",
+                    "I saw Susie sitting in a shoe shine shop.",
+                    "Give papa a cup of proper coffee in a copper coffee cup."
+                ]
+            },
+            medium: {
+                skills: "S vs SH • R vs L • Word endings • Consonant clusters • Speech precision",
+                twisters: [
+                    "She sells seashells by the seashore.",
+                    "If a dog chews shoes, whose shoes does he choose?",
+                    "Red lorry, yellow lorry.",
+                    "Unique New York, you need unique New York.",
+                    "Round and round the rugged rocks, the ragged rascal ran.",
+                    "I slit the sheet, the sheet I slit, and on the slitted sheet, I sit.",
+                    "Six slippery snails slid slowly seaward.",
+                    "Near an ear, a nearer ear, a nearly eerie ear.",
+                    "Can you can a can as a canner can can a can?",
+                    "How can a clam cram in a clean cream can?"
+                ]
+            },
+            expert: {
+                skills: "TH sounds • Complex consonant combinations • Rapid articulation • Breath control • Advanced clarity",
+                twisters: [
+                    "The thirty-three thieves thought that they thrilled the throne throughout Thursday.",
+                    "Sixth sick sheikh's sixth sheep's sick.",
+                    "Irish wristwatch, Swiss wristwatch.",
+                    "I wish to wash my Irish wristwatch.",
+                    "Imagine an imaginary menagerie manager managing an imaginary menagerie.",
+                    "She sees cheese, she sees cheese, she sees the cheese, she seized the cheese.",
+                    "The seething sea ceaseth and thus the seething sea sufficeth us.",
+                    "Six sick hicks nick six slick bricks with picks and sticks.",
+                    "If two witches were watching two watches, which witch would watch which watch?",
+                    "Pad kid poured curd pulled cod."
+                ]
+            }
+        };
+
+        let currentDifficulty = 'easy';
         
-        let state = {
-            mode: null,
-            score: 0,
-            wrong: 0,
-            questionPool: [],
-            currentIndex: 0,
-            startTime: 0,
-            timerInterval: null,
-            currentCorrectAnswer: "",
-            currentQuestionText: "",
-            elapsedSeconds: 0,
-            isTransitioning: false,
-            mistakes: [] // Stores objects: { question, expected, given }
-        };
+        // DOM Elements
+        const diffButtons = document.querySelectorAll('.difficulty-selector button');
+        const practiceBtn = document.getElementById('practiceBtn');
+        const practiceArea = document.getElementById('practiceArea');
 
-        // --- DOM Elements ---
-        const screens = {
-            home: document.getElementById('home-screen'),
-            test: document.getElementById('test-screen'),
-            results: document.getElementById('results-screen')
-        };
-        
-        const ui = {
-            timer: document.getElementById('ui-timer'),
-            qNum: document.getElementById('ui-q-num'),
-            score: document.getElementById('ui-score'),
-            title: document.getElementById('ui-test-title'),
-            question: document.getElementById('ui-question'),
-            input: document.getElementById('answer-input'),
-            feedback: document.getElementById('ui-feedback'),
-            mistakes: document.getElementById('res-mistakes')
-        };
+        // Handle Difficulty Selection in Header
+        diffButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                // Remove active class from all nav buttons
+                diffButtons.forEach(b => b.classList.remove('active'));
+                // Add active class to the clicked one
+                e.target.classList.add('active');
+                // Update state
+                currentDifficulty = e.target.getAttribute('data-level');
+            });
+        });
 
-        // --- Utility ---
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
-        }
-
-        // --- Navigation ---
-        function showScreen(screenId) {
-            Object.values(screens).forEach(s => s.classList.remove('active'));
-            document.getElementById(screenId).classList.add('active');
+        // Handle Generation
+        practiceBtn.addEventListener('click', () => {
+            const data = practiceData[currentDifficulty];
             
-            // Scroll to top when showing results
-            if(screenId === 'results-screen') {
-                window.scrollTo(0,0);
-            }
-        }
+            // Select 5 random, unique twisters from the chosen difficulty
+            const shuffled = [...data.twisters].sort(() => 0.5 - Math.random());
+            const selected = shuffled.slice(0, 5);
 
-        // --- Test Logic ---
-        function startTest(mode) {
-            const indices = Array.from({length: 26}, (_, i) => i);
+            let htmlContent = '';
+            let globalCounter = 1;
+
+            // Inject the Skills Overview Box
+            htmlContent += `
+                <div class="skills-box">
+                    <h3>Skills Trained (${currentDifficulty})</h3>
+                    <p>${data.skills}</p>
+                </div>
+            `;
+
+            // ---------------------------------------------------------
+            // PHASE 1: Muscle Memory (5 consecutive reps per twister)
+            // ---------------------------------------------------------
+            htmlContent += `<h2 class="phase-title">Phase 1: Repetition (5x Each)</h2>`;
             
-            state = {
-                mode: mode,
-                score: 0,
-                wrong: 0,
-                questionPool: shuffleArray(indices),
-                currentIndex: 0,
-                startTime: Date.now(),
-                elapsedSeconds: 0,
-                currentCorrectAnswer: "",
-                currentQuestionText: "",
-                isTransitioning: false,
-                mistakes: []
-            };
-
-            const titles = {
-                'letter-to-number': 'Letter → Number',
-                'number-to-letter': 'Number → Letter',
-                'opposite-pair': 'Opposite Pair'
-            };
-            ui.title.innerText = titles[mode];
-            ui.feedback.innerText = "";
-            ui.feedback.className = "feedback";
-            ui.input.value = "";
-            
-            updateStatsUI();
-            startTimer();
-            showScreen('test-screen');
-            generateQuestion();
-            
-            setTimeout(() => ui.input.focus(), 100);
-        }
-
-        function startTimer() {
-            clearInterval(state.timerInterval);
-            state.timerInterval = setInterval(() => {
-                state.elapsedSeconds = Math.floor((Date.now() - state.startTime) / 1000);
-                ui.timer.innerText = `Timer: ${formatTime(state.elapsedSeconds)}`;
-            }, 1000);
-        }
-
-        function generateQuestion() {
-            if (state.currentIndex >= 26) {
-                endTest();
-                return;
+            for (let i = 0; i < 5; i++) {
+                htmlContent += `
+                    <div class="twister-group">
+                        <div class="group-focus">Twister ${i + 1}</div>`;
+                
+                for (let j = 0; j < 5; j++) {
+                    htmlContent += `
+                        <div class="twister-item">
+                            <span class="item-number">${String(globalCounter).padStart(2, '0')}.</span>
+                            <span>${selected[i]}</span>
+                        </div>`;
+                    globalCounter++;
+                }
+                htmlContent += `</div>`;
             }
 
-            ui.input.value = "";
-            state.isTransitioning = false;
+            // ---------------------------------------------------------
+            // PHASE 2: Fluidity (Alternating through all 5 twisters, 5 times)
+            // ---------------------------------------------------------
+            htmlContent += `<h2 class="phase-title" style="margin-top: 4rem;">Phase 2: Alternating Flow (1-5 Sequence)</h2>`;
             
-            const letterIndex = state.questionPool[state.currentIndex];
-            const currentLetter = alphabet[letterIndex];
-            
-            if (state.mode === 'letter-to-number') {
-                state.currentQuestionText = currentLetter;
-                state.currentCorrectAnswer = (letterIndex + 1).toString();
-            } 
-            else if (state.mode === 'number-to-letter') {
-                state.currentQuestionText = (letterIndex + 1).toString();
-                state.currentCorrectAnswer = currentLetter;
-            } 
-            else if (state.mode === 'opposite-pair') {
-                state.currentQuestionText = currentLetter;
-                state.currentCorrectAnswer = alphabet[25 - letterIndex];
+            for (let i = 0; i < 5; i++) {
+                htmlContent += `<div class="twister-group">
+                    <div class="group-focus">Full Set ${i + 1}</div>`;
+                
+                for (let j = 0; j < 5; j++) {
+                    htmlContent += `
+                        <div class="twister-item">
+                            <span class="item-number">${String(globalCounter).padStart(2, '0')}.</span>
+                            <span>${selected[j]}</span>
+                        </div>`;
+                    globalCounter++;
+                }
+                htmlContent += `</div>`;
             }
 
-            ui.question.innerText = state.currentQuestionText;
-            updateStatsUI();
-        }
-
-        function processAnswer(userAnswer) {
-            if (state.isTransitioning) return;
-            state.isTransitioning = true; 
-
-            if (userAnswer === state.currentCorrectAnswer) {
-                state.score++;
-                showFeedback("Correct!", "success");
-            } else {
-                state.wrong++;
-                // Record the mistake
-                state.mistakes.push({
-                    question: state.currentQuestionText,
-                    expected: state.currentCorrectAnswer,
-                    given: userAnswer
-                });
-                showFeedback(`Wrong! Answer: ${state.currentCorrectAnswer}`, "error");
-            }
-
-            state.currentIndex++;
+            // Render to screen
+            practiceArea.innerHTML = htmlContent;
             
+            // Reset animation
+            practiceArea.style.display = 'none';
             setTimeout(() => {
-                generateQuestion();
-            }, 300);
-        }
-
-        function showFeedback(msg, type) {
-            ui.feedback.innerText = msg;
-            ui.feedback.className = `feedback ${type}`;
-        }
-
-        function updateStatsUI() {
-            const displayQNum = Math.min(state.currentIndex + 1, 26);
-            ui.qNum.innerText = `Question: ${displayQNum}/26`;
-            ui.score.innerText = `Score: ${state.score}/${state.currentIndex}`;
-        }
-
-        function endTest() {
-            clearInterval(state.timerInterval);
-            
-            const totalAnswered = state.currentIndex;
-            const accuracy = totalAnswered > 0 ? Math.round((state.score / totalAnswered) * 100) : 0;
-            const avgTime = totalAnswered > 0 ? (state.elapsedSeconds / totalAnswered).toFixed(1) : 0;
-            
-            const titles = {
-                'letter-to-number': 'Letter → Number',
-                'number-to-letter': 'Number → Letter',
-                'opposite-pair': 'Opposite Pair'
-            };
-
-            // Top Stats
-            document.getElementById('res-type').innerText = titles[state.mode];
-            document.getElementById('res-accuracy').innerText = `${accuracy}%`;
-            document.getElementById('res-score').innerText = `${state.score} / ${totalAnswered}`;
-            document.getElementById('res-time').innerText = formatTime(state.elapsedSeconds);
-            document.getElementById('res-avg').innerText = `${avgTime}s / q`;
-
-            // Mistakes Render
-            if (state.mistakes.length === 0) {
-                ui.mistakes.innerHTML = `
-                    <h3>Mistakes Review</h3>
-                    <p style="color: var(--accent-color); margin-bottom: 0;">Flawless victory! You made zero mistakes.</p>
-                `;
-            } else {
-                let mistakesHTML = `<h3>Mistakes Review (${state.mistakes.length})</h3><div class="mistakes-list">`;
-                
-                state.mistakes.forEach(m => {
-                    mistakesHTML += `
-                        <div class="mistake-item">
-                            <div>Question: <span style="color: var(--text-primary);">${m.question}</span></div>
-                            <div>Your Answer: <span style="color: var(--danger-color);">${m.given}</span></div>
-                            <div>Correct Answer: <span style="color: var(--accent-color);">${m.expected}</span></div>
-                        </div>
-                    `;
-                });
-                
-                mistakesHTML += `</div>`;
-                ui.mistakes.innerHTML = mistakesHTML;
-            }
-
-            showScreen('results-screen');
-        }
-
-        // --- Helpers ---
-        function formatTime(totalSeconds) {
-            const m = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
-            const s = (totalSeconds % 60).toString().padStart(2, '0');
-            return `${m}:${s}`;
-        }
-
-        // --- Event Listeners ---
-        
-        ui.input.addEventListener('input', function(e) {
-            const userAnswer = ui.input.value.trim().toUpperCase();
-            if (!userAnswer) return;
-
-            const targetLength = state.currentCorrectAnswer.length;
-            
-            if (userAnswer.length === targetLength) {
-                processAnswer(userAnswer);
-            }
+                practiceArea.style.display = 'block';
+                // Smooth scroll down to the test, pushing the header out of the way
+                const y = practiceArea.getBoundingClientRect().top + window.scrollY - 100;
+                window.scrollTo({top: y, behavior: 'smooth'});
+            }, 10);
         });
-
-        screens.test.addEventListener('click', () => {
-            if (screens.test.classList.contains('active')) {
-                ui.input.focus();
-            }
-        });
-
     </script>
 </body>
 </html>
